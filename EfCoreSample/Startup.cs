@@ -7,8 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using EfCoreSample.Infrastructure;
+using AutoMapper;
 
 using System.IO;
+using EfCoreSample.Infrastructure.Abstraction;
+using EfCoreSample.Infrastructure.Repository;
+using EfCoreSample.Doman.Entities;
+using EfCoreSample.Infrastructure.Services;
 
 namespace EfCoreSample
 {
@@ -37,8 +42,9 @@ namespace EfCoreSample
            
             services.AddDbContext<EfCoreSampleDbContext>(options =>
                 options.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
-            services.AddScoped<IRepository, BaseRepository>();
-            services.AddScoped<IService, Service>();
+            services.AddScoped<IRepository<Project, long>, ProjectRepository>();
+            services.AddScoped<IService<Project, long>, ProjectService>();
+            //services.AddSingleton<AutoMapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

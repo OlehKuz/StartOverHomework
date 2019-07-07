@@ -6,30 +6,33 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using EfCoreSample.Doman.Abstraction;
+using EfCoreSample.Infrastructure.Services;
 
 namespace EfCoreSample.Infrastructure.Abstraction
 {
-    public interface IService<TKey>
+    public interface IService<TSource,TKey> where TSource : class
     {
+        Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(TSource category)
+            where SaveTSourceResponse : BaseResponse;
 
-        Task<TDestination> FindAsync<TSource, TDestination>(TKey key) 
-        where TSource : class where TDestination : class ;
+        Task<TDestination> FindAsync<TDestination>(TKey key) 
+             where TDestination : class ;
 
-        Task<List<TDestination>> GetAsync<TSource, TDestination>
-            (Expression<Func<TSource, bool>> expression)
-        where TSource : class where TDestination : class;
-        Task<TDestination> InsertAsync<TSource, TDestination>(TSource entity)
-        where TSource : class where TDestination : class;
+        Task<List<TDestination>> GetAsync<TDestination>
+            (Expression<Func<TSource, bool>> expression) where TDestination : class;
+        Task<TDestination> InsertAsync<TDestination>(TSource entity)
+             where TDestination : class;
 
-        Task UpdateRange<TSource>(IEnumerable<TSource> entities)
-             where TSource : class;
+        Task UpdateRange<TDestination>(IEnumerable<TDestination> entities)
+             where TDestination : class;
 
-        Task<bool> Update<TSource, TDestination>(TSource entity)
-            where TSource : class where TDestination : class;
+        Task<bool> Update<TDestination>(TDestination entity)
+            where TDestination : class;
 
-        Task<bool> DeleteAsync<TSource>(TKey key) where TSource : class;
+        Task<bool> DeleteAsync(TKey key);
 
-        Task<bool> DeleteAsync<TSource>(TSource entity) where TSource : class;
-        Task<bool> AnyAsync<TSource>(TKey key) where TSource : class;
+        Task<bool> DeleteAsync(TSource entity);
+        Task<bool> AnyAsync(TKey key);
+        
     }
 }

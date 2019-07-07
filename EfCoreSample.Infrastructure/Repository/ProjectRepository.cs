@@ -19,8 +19,6 @@ namespace EfCoreSample.Infrastructure.Repository
         {
             _context = context;
         }
-      
-
         public async Task<Project> FindAsync(long key)
         {
             var project = await _context.Projects.FindAsync(key);
