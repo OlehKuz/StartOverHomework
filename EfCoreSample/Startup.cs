@@ -37,6 +37,8 @@ namespace EfCoreSample
            
             services.AddDbContext<EfCoreSampleDbContext>(options =>
                 options.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
+            services.AddScoped<IRepository, BaseRepository>();
+            services.AddScoped<IService, Service>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +51,7 @@ namespace EfCoreSample
             app.UseMvc();
             app.EnsureContextMigrated<EfCoreSampleDbContext>();
             //TODO change this seed method, remove EfCoreSampleDbContext from configure method
-            SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
+            //SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
         }
     }
 }

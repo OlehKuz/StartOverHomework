@@ -8,6 +8,7 @@ using EfCoreSample.Doman;
 
 namespace EfCoreSample.Persistance
 {
+    //TODO BUG IF have already 2 employees in DB(from config), then 2 enloyeedepartment have same keys
     public static class SeedDb
     {
         public static void Initialize(EfCoreSampleDbContext context)
