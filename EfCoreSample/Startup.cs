@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using EfCoreSample.Infrastructure;
 
 namespace EfCoreSample
 {
@@ -13,6 +15,7 @@ namespace EfCoreSample
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -34,6 +37,8 @@ namespace EfCoreSample
             }
 
             app.UseMvc();
+            app.EnsureContextMigrated<EfCoreSampleDbContext>();
+            //ContextSeed.SeedAsync(app).Wait();
         }
     }
 }
