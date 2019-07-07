@@ -1,4 +1,5 @@
 ﻿using EfCoreSample.Doman.Abstraction;
+using EfCoreSample.Doman.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -23,5 +24,6 @@ namespace EfCoreSample.Doman
         public ICollection<Employee> ReportsToEmployees { get; set; }
 
         public ICollection<EmployeeDepartment> EmployeeDepartments { get; set; }
+        public ICollection<EmployeeProject> EmployeeProjects { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EfCoreSample.Doman;
+using EfCoreSample.Doman.Entities;
 using EfCoreSample.Persistance.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace EfCoreSample.Persistance
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Project> Projects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -21,6 +23,8 @@ namespace EfCoreSample.Persistance
             builder.ApplyConfiguration(new AddressEntityConfiguration());
             builder.ApplyConfiguration(new EmployeeDepartmentEntityConfiguration());
             builder.ApplyConfiguration(new EmployeeEntityConfiguration());
+            builder.ApplyConfiguration(new EmployeeProjectEntityConfiguration());
+            builder.ApplyConfiguration(new ProjectEntityConfiguration());
         }
     }
 }
