@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
+
 namespace EfCoreSample.Persistance
 {
     class EfCoreDbContextFactory : IDesignTimeDbContextFactory<EfCoreSampleDbContext>
@@ -11,11 +12,12 @@ namespace EfCoreSample.Persistance
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional:true)
+                .AddUserSecrets<EfCoreDbContextFactory>()
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<EfCoreSampleDbContext>();
-            optionsBuilder.UseMySql(configuration.GetConnectionString("LocalConnection"));
+            optionsBuilder.UseMySql(configuration["ConnectionStrings:LocalConnection"]);
 
             return new EfCoreSampleDbContext(optionsBuilder.Options);
         }
