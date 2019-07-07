@@ -7,23 +7,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using EfCoreSample.Infrastructure;
+
 using System.IO;
 
 namespace EfCoreSample
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
-            Configuration = configuration;
-            /*var builder = new ConfigurationBuilder()
+            
+            var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true);
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }*/
             
+                builder.AddUserSecrets<EfCoreSampleDbContext>();
+            Configuration = builder.Build();
+
         }
 
         public IConfiguration Configuration { get; set; }
@@ -34,7 +34,8 @@ namespace EfCoreSample
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddDbContext<EfCoreSampleDbContext>(options => 
+           
+            services.AddDbContext<EfCoreSampleDbContext>(options =>
                 options.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
         }
 
@@ -45,13 +46,10 @@ namespace EfCoreSample
             {
                 app.UseDeveloperExceptionPage();
             }
-            /*app.Run(async(context)=> 
-            {
-
-            })*/
             app.UseMvc();
             app.EnsureContextMigrated<EfCoreSampleDbContext>();
-            //ContextSeed.SeedAsync(app).Wait();
+            //TODO change this seed method, remove EfCoreSampleDbContext from configure method
+            SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.IO;
 
 namespace EfCoreSample.Persistance
 {
-    class EfCoreDbContextFactory : IDesignTimeDbContextFactory<EfCoreSampleDbContext>
+    public class EfCoreDbContextFactory : IDesignTimeDbContextFactory<EfCoreSampleDbContext>
     {
         public EfCoreSampleDbContext CreateDbContext(string[] args)
         {

@@ -8,7 +8,7 @@ namespace EfCoreSample.Persistance.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Address> addressBuilder)
         {
-            addressBuilder.ToTable("address", EfCoreSampleDbContext.SchemaName);
+            addressBuilder.ToTable("addresses", EfCoreSampleDbContext.SchemaName);
 
             addressBuilder.HasKey(a => a.Id);
 

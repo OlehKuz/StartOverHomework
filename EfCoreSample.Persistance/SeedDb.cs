@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -8,7 +8,7 @@ using EfCoreSample.Doman;
 
 namespace EfCoreSample.Persistance
 {
-    public class SeedDb
+    public static class SeedDb
     {
         public static void Initialize(EfCoreSampleDbContext context)
         {
@@ -19,14 +19,14 @@ namespace EfCoreSample.Persistance
                     new Project
                     {
                         Title = "Title project1",
-                        Status = ProjectStatus.Pending.ToString(),
+                        Status = "Pending",
                         StartTime = new DateTime(2019, 7, 30),
                         EndTime = new DateTime(2019, 8, 30)
                     },
                     new Project
                     {
                         Title = "Title project2",
-                        Status = ProjectStatus.Cancelled.ToString(),
+                        Status = "Cancelled",
                         StartTime = new DateTime(2019, 7, 6),
                         EndTime = new DateTime(2019, 8, 25)
                     }
@@ -196,4 +196,4 @@ namespace EfCoreSample.Persistance
 
         }
     }
-}*/
+}

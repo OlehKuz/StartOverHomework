@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EfCoreSample.Persistance.Migrations
 {
-    public partial class i : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,7 @@ namespace EfCoreSample.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "employee",
+                name: "employees",
                 schema: "efcoresample",
                 columns: table => new
                 {
@@ -39,12 +39,12 @@ namespace EfCoreSample.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_employee", x => x.Id);
+                    table.PrimaryKey("PK_employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_employee_employee_ReportsToId",
+                        name: "FK_employees_employees_ReportsToId",
                         column: x => x.ReportsToId,
                         principalSchema: "efcoresample",
-                        principalTable: "employee",
+                        principalTable: "employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -58,7 +58,7 @@ namespace EfCoreSample.Persistance.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(maxLength: 255, nullable: false),
                     Description = table.Column<string>(maxLength: 2147483647, nullable: true),
-                    Status = table.Column<int>(maxLength: 10, nullable: false),
+                    Status = table.Column<string>(maxLength: 10, nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false, defaultValueSql: "current_timestamp(6) ON UPDATE current_timestamp(6)"),
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false)
@@ -69,32 +69,7 @@ namespace EfCoreSample.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeDepartment",
-                columns: table => new
-                {
-                    EmployeeId = table.Column<long>(nullable: false),
-                    DepartmentId = table.Column<long>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeDepartment", x => new { x.EmployeeId, x.DepartmentId });
-                    table.ForeignKey(
-                        name: "FK_EmployeeDepartment_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmployeeDepartment_employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalSchema: "efcoresample",
-                        principalTable: "employee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "address",
+                name: "addresses",
                 schema: "efcoresample",
                 columns: table => new
                 {
@@ -108,18 +83,44 @@ namespace EfCoreSample.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_address", x => x.Id);
+                    table.PrimaryKey("PK_addresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_address_employee_EmployeeId",
+                        name: "FK_addresses_employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalSchema: "efcoresample",
-                        principalTable: "employee",
+                        principalTable: "employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "employeeproject",
+                name: "employeeDepartments",
+                schema: "efcoresample",
+                columns: table => new
+                {
+                    EmployeeId = table.Column<long>(nullable: false),
+                    DepartmentId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_employeeDepartments", x => new { x.EmployeeId, x.DepartmentId });
+                    table.ForeignKey(
+                        name: "FK_employeeDepartments_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_employeeDepartments_employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalSchema: "efcoresample",
+                        principalTable: "employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "employeeProjects",
                 schema: "efcoresample",
                 columns: table => new
                 {
@@ -128,16 +129,16 @@ namespace EfCoreSample.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_employeeproject", x => new { x.EmployeeId, x.ProjectId });
+                    table.PrimaryKey("PK_employeeProjects", x => new { x.EmployeeId, x.ProjectId });
                     table.ForeignKey(
-                        name: "FK_employeeproject_employee_EmployeeId",
+                        name: "FK_employeeProjects_employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalSchema: "efcoresample",
-                        principalTable: "employee",
+                        principalTable: "employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_employeeproject_projects_ProjectId",
+                        name: "FK_employeeProjects_projects_ProjectId",
                         column: x => x.ProjectId,
                         principalSchema: "efcoresample",
                         principalTable: "projects",
@@ -147,77 +148,79 @@ namespace EfCoreSample.Persistance.Migrations
 
             migrationBuilder.InsertData(
                 schema: "efcoresample",
-                table: "employee",
+                table: "employees",
                 columns: new[] { "Id", "FirstName", "LastName", "ReportsToId" },
                 values: new object[] { 1L, "Petro", "Petrenko", null });
 
             migrationBuilder.InsertData(
                 schema: "efcoresample",
-                table: "employee",
+                table: "employees",
                 columns: new[] { "Id", "FirstName", "LastName", "ReportsToId" },
                 values: new object[] { 2L, "Olga", "Petrenko", null });
 
             migrationBuilder.InsertData(
                 schema: "efcoresample",
-                table: "address",
+                table: "addresses",
                 columns: new[] { "Id", "City", "Country", "EmployeeId", "PhoneNumber", "Street" },
                 values: new object[] { 1L, "Ternopil", "Ukraine", 1L, null, "Lvivs`ka" });
 
             migrationBuilder.InsertData(
                 schema: "efcoresample",
-                table: "address",
+                table: "addresses",
                 columns: new[] { "Id", "City", "Country", "EmployeeId", "PhoneNumber", "Street" },
                 values: new object[] { 2L, "Ternopil", "Ukraine", 2L, null, "Tarnavs`kogo" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeDepartment_DepartmentId",
-                table: "EmployeeDepartment",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_address_EmployeeId",
+                name: "IX_addresses_EmployeeId",
                 schema: "efcoresample",
-                table: "address",
+                table: "addresses",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_address_City_Country_Street",
+                name: "IX_addresses_City_Country_Street",
                 schema: "efcoresample",
-                table: "address",
+                table: "addresses",
                 columns: new[] { "City", "Country", "Street" })
                 .Annotation("MySql:FullTextIndex", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_employee_ReportsToId",
+                name: "IX_employeeDepartments_DepartmentId",
                 schema: "efcoresample",
-                table: "employee",
-                column: "ReportsToId");
+                table: "employeeDepartments",
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_employeeproject_ProjectId",
+                name: "IX_employeeProjects_ProjectId",
                 schema: "efcoresample",
-                table: "employeeproject",
+                table: "employeeProjects",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employees_ReportsToId",
+                schema: "efcoresample",
+                table: "employees",
+                column: "ReportsToId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EmployeeDepartment");
-
-            migrationBuilder.DropTable(
-                name: "address",
+                name: "addresses",
                 schema: "efcoresample");
 
             migrationBuilder.DropTable(
-                name: "employeeproject",
+                name: "employeeDepartments",
+                schema: "efcoresample");
+
+            migrationBuilder.DropTable(
+                name: "employeeProjects",
                 schema: "efcoresample");
 
             migrationBuilder.DropTable(
                 name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "employee",
+                name: "employees",
                 schema: "efcoresample");
 
             migrationBuilder.DropTable(

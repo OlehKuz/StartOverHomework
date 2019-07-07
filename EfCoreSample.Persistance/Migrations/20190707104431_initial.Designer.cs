@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EfCoreSample.Persistance.Migrations
 {
     [DbContext(typeof(EfCoreSampleDbContext))]
-    [Migration("20190707092346_i")]
-    partial class i
+    [Migration("20190707104431_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace EfCoreSample.Persistance.Migrations
                     b.HasIndex("City", "Country", "Street")
                         .HasAnnotation("MySql:FullTextIndex", true);
 
-                    b.ToTable("address","efcoresample");
+                    b.ToTable("addresses","efcoresample");
 
                     b.HasData(
                         new
@@ -98,7 +98,7 @@ namespace EfCoreSample.Persistance.Migrations
 
                     b.HasIndex("ReportsToId");
 
-                    b.ToTable("employee","efcoresample");
+                    b.ToTable("employees","efcoresample");
 
                     b.HasData(
                         new
@@ -127,7 +127,7 @@ namespace EfCoreSample.Persistance.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("EmployeeDepartment");
+                    b.ToTable("employeeDepartments","efcoresample");
                 });
 
             modelBuilder.Entity("EfCoreSample.Doman.Entities.EmployeeProject", b =>
@@ -140,7 +140,7 @@ namespace EfCoreSample.Persistance.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("employeeproject","efcoresample");
+                    b.ToTable("employeeProjects","efcoresample");
                 });
 
             modelBuilder.Entity("EfCoreSample.Doman.Entities.Project", b =>
@@ -159,7 +159,8 @@ namespace EfCoreSample.Persistance.Migrations
 
                     b.Property<DateTime>("StartTime");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<string>("Title")

@@ -8,6 +8,7 @@ namespace EfCoreSample.Persistance.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<EmployeeDepartment> employeeDepartmentBuilder)
         {
+            employeeDepartmentBuilder.ToTable("employeeDepartments", EfCoreSampleDbContext.SchemaName);
             employeeDepartmentBuilder.HasKey(ed => new { ed.EmployeeId, ed.DepartmentId });
 
             employeeDepartmentBuilder

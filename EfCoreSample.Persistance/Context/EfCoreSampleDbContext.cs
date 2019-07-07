@@ -15,6 +15,8 @@ namespace EfCoreSample.Persistance
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<EmployeeDepartment> EmployeeDepartments { get; set; }
+        public DbSet<EmployeeProject> EmployeeProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
