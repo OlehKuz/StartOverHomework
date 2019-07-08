@@ -39,6 +39,7 @@ namespace EfCoreSample.Infrastructure.Services
         {
             
             _db.FindAsync(key);
+            throw new NotImplementedException();
         }
 
         public Task<List<TDestination>> GetAsync<TDestination>(Expression<Func<Project, bool>> expression) where TDestination : class

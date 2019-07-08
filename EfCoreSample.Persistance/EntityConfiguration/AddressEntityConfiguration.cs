@@ -25,7 +25,7 @@ namespace EfCoreSample.Persistance.EntityConfiguration
                 a.Street
             }).ForMySqlIsFullText();
 
-            addressBuilder.HasData(
+           /* addressBuilder.HasData(
                 new Address()
                 {
                     Id = 1,
@@ -41,7 +41,7 @@ namespace EfCoreSample.Persistance.EntityConfiguration
                     City = "Ternopil",
                     Country = "Ukraine",
                     EmployeeId = 2
-                });
+                });*/
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace EfCoreSample.Doman.AutoMapper
 {
@@ -13,8 +11,12 @@ namespace EfCoreSample.Doman.AutoMapper
         {
             CreateMap<ProjectDTO, Project>()
                     .ForMember(dest => dest.Status,
-                        src => src.MapFrom(s => s.ToDescriptionString()));
+                        src => src.MapFrom(s => EnumExtention.GetDescriptionFromEnumValue(s.Status)));
+            CreateMap<Project, ProjectDTO>()
+                    .ForMember(dest => dest.Status,
+                        src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
 
         }
+
     }
 }

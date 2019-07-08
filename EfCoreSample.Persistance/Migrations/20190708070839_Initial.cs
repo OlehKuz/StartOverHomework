@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EfCoreSample.Persistance.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -145,30 +145,6 @@ namespace EfCoreSample.Persistance.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                schema: "efcoresample",
-                table: "employees",
-                columns: new[] { "Id", "FirstName", "LastName", "ReportsToId" },
-                values: new object[] { 1L, "Petro", "Petrenko", null });
-
-            migrationBuilder.InsertData(
-                schema: "efcoresample",
-                table: "employees",
-                columns: new[] { "Id", "FirstName", "LastName", "ReportsToId" },
-                values: new object[] { 2L, "Olga", "Petrenko", null });
-
-            migrationBuilder.InsertData(
-                schema: "efcoresample",
-                table: "addresses",
-                columns: new[] { "Id", "City", "Country", "EmployeeId", "PhoneNumber", "Street" },
-                values: new object[] { 1L, "Ternopil", "Ukraine", 1L, null, "Lvivs`ka" });
-
-            migrationBuilder.InsertData(
-                schema: "efcoresample",
-                table: "addresses",
-                columns: new[] { "Id", "City", "Country", "EmployeeId", "PhoneNumber", "Street" },
-                values: new object[] { 2L, "Ternopil", "Ukraine", 2L, null, "Tarnavs`kogo" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_addresses_EmployeeId",

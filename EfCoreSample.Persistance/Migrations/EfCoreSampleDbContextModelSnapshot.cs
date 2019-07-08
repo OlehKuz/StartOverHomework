@@ -40,24 +40,6 @@ namespace EfCoreSample.Persistance.Migrations
                         .HasAnnotation("MySql:FullTextIndex", true);
 
                     b.ToTable("addresses","efcoresample");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            City = "Ternopil",
-                            Country = "Ukraine",
-                            EmployeeId = 1L,
-                            Street = "Lvivs`ka"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            City = "Ternopil",
-                            Country = "Ukraine",
-                            EmployeeId = 2L,
-                            Street = "Tarnavs`kogo"
-                        });
                 });
 
             modelBuilder.Entity("EfCoreSample.Doman.Department", b =>
@@ -97,22 +79,6 @@ namespace EfCoreSample.Persistance.Migrations
                     b.HasIndex("ReportsToId");
 
                     b.ToTable("employees","efcoresample");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            FirstName = "Petro",
-                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Petrenko"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            FirstName = "Olga",
-                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Petrenko"
-                        });
                 });
 
             modelBuilder.Entity("EfCoreSample.Doman.EmployeeDepartment", b =>

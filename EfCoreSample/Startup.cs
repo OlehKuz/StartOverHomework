@@ -68,7 +68,7 @@ namespace EfCoreSample
             app.UseMvc();
             app.EnsureContextMigrated<EfCoreSampleDbContext>();
             //TODO change this seed method, remove EfCoreSampleDbContext from configure method
-            //SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
+            SeedDb.Initialize(context);//ContextSeed.SeedAsync(app).Wait();
         }
     }
 }
