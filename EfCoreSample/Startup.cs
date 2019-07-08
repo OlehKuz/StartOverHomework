@@ -46,7 +46,8 @@ namespace EfCoreSample
             services.AddDbContext<EfCoreSampleDbContext>(options =>
                 options.UseMySql(Configuration["ConnectionStrings:LocalConnection"]));
             services.AddScoped<IRepository<Project, long>, ProjectRepository>();
-            services.AddScoped<IService<Project, long>, ProjectService>();
+            services.AddScoped<IService<Project,ProjectDTO, long>, ProjectService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(Startup), typeof(Project), typeof(Employee));
             /*var config = new AutoMapper.MapperConfiguration(cfg =>
             {

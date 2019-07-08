@@ -10,15 +10,14 @@ using EfCoreSample.Infrastructure.Services;
 
 namespace EfCoreSample.Infrastructure.Abstraction
 {
-    public interface IService<TSource,TKey> where TSource : class
+    public interface IService<TSource,TDestination, TKey> where TSource : class where TDestination : class
     {
-        Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(TSource category)
-            where SaveTSourceResponse : BaseResponse;
+       /* Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(TSource category)
+            where SaveTSourceResponse : BaseResponse;*/
 
-        Task<TDestination> FindAsync<TDestination>(TKey key) 
-             where TDestination : class ;
+        Task<TDestination> FindAsync(TKey key);
 
-        Task<List<TDestination>> GetAsync<TDestination>
+       /* Task<List<TDestination>> GetAsync<TDestination>
             (Expression<Func<TSource, bool>> expression) where TDestination : class;
         Task<TKey> InsertAsync<TDestination>(TSource entity)
              where TDestination : class;
@@ -33,6 +32,6 @@ namespace EfCoreSample.Infrastructure.Abstraction
 
         Task<bool> DeleteAsync(TSource entity);
         Task<bool> AnyAsync(TKey key);
-        
+        */
     }
 }

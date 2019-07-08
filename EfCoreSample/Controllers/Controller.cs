@@ -1,5 +1,8 @@
 ﻿using EfCoreSample.Doman.DTO;
+using EfCoreSample.Doman.Entities;
+using EfCoreSample.Infrastructure.Abstraction;
 using EfCoreSample.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,13 +15,13 @@ namespace EfCoreSample.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly ProjectService _db;
+        private readonly IService<Project, ProjectDTO, long> _db;
 
-        public ProjectController(ProjectService db)
+        public ProjectController(IService<Project, ProjectDTO, long> db)
         {
             _db = db;
         }
-
+        /*
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<List<ProjectDTO>>> Get()
@@ -32,7 +35,7 @@ namespace EfCoreSample.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 "Database Failure");
             }
-        }
+        }*/
 
         // GET api/values/5
         [HttpGet("{id}")]
@@ -40,7 +43,7 @@ namespace EfCoreSample.Controllers
         {
             try
             {
-                var dto = await _db.FindAsync<ProjectDTO>(id);
+                var dto = await _db.FindAsync(id);
                 if (dto == null) return NotFound();
                 return dto;
             }
@@ -50,7 +53,7 @@ namespace EfCoreSample.Controllers
                 "Database Failure");
             }
         }
-
+/*
         // POST api/values
         [HttpPost]
         public async Task<ActionResult<ProjectDTO>> Post(ProjectDTO dto)
@@ -97,6 +100,6 @@ namespace EfCoreSample.Controllers
             _repository.DeleteBook(bookToDelete);
             _repository.Save();
             return NoContent();
-        }
+        }*/
     }
 }

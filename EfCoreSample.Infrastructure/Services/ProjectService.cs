@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
 using AutoMapper;
+using EfCoreSample.Doman.DTO;
 
 namespace EfCoreSample.Infrastructure.Services
 {
-    public class ProjectService : IService<Project,long>
+    public class ProjectService : IService<Project,ProjectDTO,long>
     {
         private readonly IRepository<Project, long> _db;
 
@@ -28,21 +29,21 @@ namespace EfCoreSample.Infrastructure.Services
             where SaveTSourceResponse : BaseResponse
          {
 
-         }*/
+         }
 
         public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(DTO category)
             where SaveTSourceResponse : BaseResponse where DTO : class
         {
             throw new NotImplementedException();
-        }
+        }*/
 
-        public async Task<DTO> FindAsync<DTO>(long key) where DTO : class
+        public async Task<ProjectDTO> FindAsync(long key) 
         {           
             var project = await _db.FindAsync(key);
-            return _mapper.Map<DTO>(project);
+            return _mapper.Map<ProjectDTO>(project);
         }
 
-        public async Task<List<DTO>> GetAsync<DTO>
+       /* public async Task<List<DTO>> GetAsync<DTO>
             (Expression<Func<Project, bool>> predicate) where DTO : class
         {
             var projects = await _db.GetAsync(predicate);
@@ -107,6 +108,7 @@ namespace EfCoreSample.Infrastructure.Services
         public async Task<bool> AnyAsync(long key)
         {
             return await _db.IsExistAsync(key);
-        }
+        }*/
     }
 }
+
