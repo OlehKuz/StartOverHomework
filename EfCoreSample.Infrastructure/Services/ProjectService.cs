@@ -23,12 +23,12 @@ namespace EfCoreSample.Infrastructure.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public Task<SaveTSourceResponse> SaveAsync<TSource, SaveTSourceResponse>(TSource category)
-           where TSource : class
-           where SaveTSourceResponse : BaseResponse
-        {
-            throw new NotImplementedException();
-        }
+        /* public Task<SaveTSourceResponse> SaveAsync<TSource, SaveTSourceResponse>(TSource category)
+            where TSource : class
+            where SaveTSourceResponse : BaseResponse
+         {
+
+         }*/
 
         public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(Project category) where SaveTSourceResponse : BaseResponse
         {
@@ -37,7 +37,8 @@ namespace EfCoreSample.Infrastructure.Services
 
         public Task<TDestination> FindAsync<TDestination>(long key) where TDestination : class
         {
-            throw new NotImplementedException();
+            
+            _db.FindAsync(key);
         }
 
         public Task<List<TDestination>> GetAsync<TDestination>(Expression<Func<Project, bool>> expression) where TDestination : class

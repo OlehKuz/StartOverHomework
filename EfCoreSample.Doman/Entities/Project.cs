@@ -12,7 +12,7 @@ namespace EfCoreSample.Doman.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         //here status is a string because sql doesnt know projectstatus type
-        public string Status { get; set; }
+        public EProjectStatus Status { get; set; }
         public DateTime LastUpdated { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

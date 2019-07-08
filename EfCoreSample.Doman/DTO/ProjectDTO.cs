@@ -13,6 +13,12 @@ namespace EfCoreSample.Doman.DTO
         //in a service
 
         public EProjectStatus Status { get; set; }
+
+        internal object ToDescriptionString()
+        {
+            throw new NotImplementedException();
+        }
+
         public DateTime LastUpdated { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
