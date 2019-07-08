@@ -75,19 +75,29 @@ namespace EfCoreSample.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(long key)
+        public async Task<bool> DeleteAsync(long key)
         {
-            throw new NotImplementedException();
+            
+            try
+            {
+                var removed = _db.Remove(key);
+                if (!removed) return false;
+                //TODO assuming savechanges returns bool
+                return await _db.SaveChangesAsync();
+            }
+            catch { }
+            return false;
         }
 
         public async Task<bool> DeleteAsync<DTO>(DTO item) where DTO : class
         {
             var entity = _mapper.Map<Project>(item);
-            var removed = _db.Remove(entity);
-            if (!removed) return false;
+            
             try
             {
-                _db.Remove(entity);
+                var removed = _db.Remove(entity);
+                if (!removed) return false;
+                //TODO assuming savechanges returns bool
                 return await _db.SaveChangesAsync();
             }
             catch { }
