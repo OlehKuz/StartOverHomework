@@ -30,24 +30,25 @@ namespace EfCoreSample.Infrastructure.Services
 
          }*/
 
-        public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(Project category) where SaveTSourceResponse : BaseResponse
+        public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(DTO category) where SaveTSourceResponse : BaseResponse
         {
             throw new NotImplementedException();
         }
 
-        public Task<TDestination> FindAsync<TDestination>(long key) where TDestination : class
-        {
-            
-            _db.FindAsync(key);
-            throw new NotImplementedException();
+        public async Task<TDestination> FindAsync<TDestination>(long key) where TDestination : class
+        {           
+            var project = await _db.FindAsync(key);
+            return _mapper.Map<TDestination>(project);
         }
 
-        public Task<List<TDestination>> GetAsync<TDestination>(Expression<Func<Project, bool>> expression) where TDestination : class
+        public async Task<List<TDestination>> GetAsync<TDestination>
+            (Expression<Func<Project, bool>> predicate) where TDestination : class
         {
-            throw new NotImplementedException();
+            var projects = await _db.GetAsync(predicate);
+            return _mapper.Map<List<TDestination>>(projects);
         }
 
-        public Task<TDestination> InsertAsync<TDestination>(Project entity) where TDestination : class
+        public Task<TDestination> InsertAsync<TDestination>(TDestination entity) where TDestination : class
         {
             throw new NotImplementedException();
         }
@@ -57,7 +58,7 @@ namespace EfCoreSample.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> Update<TDestination>(TDestination entity) where TDestination : class
+        public Task<bool> Update<DTO>(DTO entity) where DTO : class
         {
             throw new NotImplementedException();
         }
@@ -67,14 +68,23 @@ namespace EfCoreSample.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(Project entity)
+        public async Task<bool> DeleteAsync<DTO>(DTO item) where DTO : class
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<Project>(item);
+            var removed = _db.Remove(entity);
+            if (!removed) return false;
+            try
+            {
+                _db.Remove(entity);
+                return await _db.SaveChangesAsync();
+            }
+            catch { }
+            return false;
         }
 
-        public Task<bool> AnyAsync(long key)
+        public async Task<bool> AnyAsync(long key)
         {
-            throw new NotImplementedException();
+            return await _db.IsExistAsync(key);
         }
 
         

@@ -37,7 +37,21 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public async Task<Project> InsertAsync(Project item)
         {
-            await _context.Projects.AddAsync(item);
+            //TODO  check if entity w this id is already tracked
+
+            /*
+             if (buyer.IsTransient())
+            {
+                return _context.Buyers
+                    .Add(buyer)
+                    .Entity;
+            }
+            else
+            {
+                return buyer;
+            }           
+             */
+             await _context.Projects.AddAsync(item);
             return item;
 
         }
@@ -54,16 +68,17 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public Project Update(Project item)
         {
-            var entity = _context.Find<Project>();
+
+            var entity = _context.Projects.Find(item.Id);
             if (entity != null) _context.Entry(entity).State =
-                        EntityState.Detached;
+                        EntityState.Modified;
             _context.Projects.Update(item);
             return item;
         }
 
         public bool Remove(Project item)
         {
-            var exists = IsExistAsync(item.Id);
+            var exists = _context.Projects.Find(item.Id);
             if (exists == null) return false;          
             _context.Projects.Remove(item);           
             return true;            
@@ -71,10 +86,10 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public bool Remove(long key)
         {
-            var exists = IsExistAsync(key);
-            if (exists == null) return false;
-            var entity = _context.Projects.Find(key);
-            _context.Projects.Remove(entity);
+            var project = _context.Projects.Find(key);
+            if (project == null) return false;
+            
+            _context.Projects.Remove(project);
             return true;
         }
 
