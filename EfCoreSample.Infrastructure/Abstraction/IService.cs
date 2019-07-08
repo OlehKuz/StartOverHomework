@@ -20,7 +20,7 @@ namespace EfCoreSample.Infrastructure.Abstraction
 
         Task<List<TDestination>> GetAsync<TDestination>
             (Expression<Func<TSource, bool>> expression) where TDestination : class;
-        Task<TDestination> InsertAsync<TDestination>(TSource entity)
+        Task<TKey> InsertAsync<TDestination>(TSource entity)
              where TDestination : class;
 
         Task UpdateRange<TDestination>(IEnumerable<TDestination> entities)

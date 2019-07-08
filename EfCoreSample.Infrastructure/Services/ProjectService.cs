@@ -30,30 +30,42 @@ namespace EfCoreSample.Infrastructure.Services
 
          }*/
 
-        public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(DTO category) where SaveTSourceResponse : BaseResponse
+        public Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(DTO category)
+            where SaveTSourceResponse : BaseResponse where DTO : class
         {
             throw new NotImplementedException();
         }
 
-        public async Task<TDestination> FindAsync<TDestination>(long key) where TDestination : class
+        public async Task<DTO> FindAsync<DTO>(long key) where DTO : class
         {           
             var project = await _db.FindAsync(key);
-            return _mapper.Map<TDestination>(project);
+            return _mapper.Map<DTO>(project);
         }
 
-        public async Task<List<TDestination>> GetAsync<TDestination>
-            (Expression<Func<Project, bool>> predicate) where TDestination : class
+        public async Task<List<DTO>> GetAsync<DTO>
+            (Expression<Func<Project, bool>> predicate) where DTO : class
         {
             var projects = await _db.GetAsync(predicate);
-            return _mapper.Map<List<TDestination>>(projects);
+            return _mapper.Map<List<DTO>>(projects);
         }
 
-        public Task<TDestination> InsertAsync<TDestination>(TDestination entity) where TDestination : class
+        public Task<long> InsertAsync<DTO>(DTO item) where DTO : class
         {
-            throw new NotImplementedException();
+            var entity = _mapper.Map<Project>(item);
+            try
+            {
+                var added = _db.InsertAsync(entity);
+                var success = await _dbWrite.SaveChangesAsync();
+                if (success) return added.Id;
+                return -1;
+            }
+            catch { }
+            return -1;
+            
+            
         }
 
-        public Task UpdateRange<TDestination>(IEnumerable<TDestination> entities) where TDestination : class
+        public Task UpdateRange<DTO>(IEnumerable<DTO> entities) where DTO : class
         {
             throw new NotImplementedException();
         }
@@ -86,87 +98,5 @@ namespace EfCoreSample.Infrastructure.Services
         {
             return await _db.IsExistAsync(key);
         }
-
-        
-
-
-
-        /*   public async Task<bool> AnyAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class
-           {
-               return await _db.AnyAsync(expression);
-           }
-
-           public async Task<int> CreateAsync<TSource, TDestination>(TSource item)
-               where TSource : class
-               where TDestination : class
-           {
-               try
-               {
-                   var entity = _mapper.Map<TDestination>(item);
-                   _dbWrite.Add(entity);
-                   var success = await _dbWrite.SaveChangesAsync();
-                   if (success) return (int)entity.GetType().GetProperty("Id").GetValue(entity);
-                   return -1;
-               }
-               catch { }
-               return -1;
-           }
-
-           public async Task<bool> DeleteAsync<TSource>(Expression<Func<TSource, bool>> expression) where TSource : class
-           {
-               try
-               {
-                   _dbWrite.Delete(expression);
-                   return await _dbWrite.SaveChangesAsync();
-               }
-               catch { }
-               return false;
-           }
-
-           public async Task<List<TDestination>> GetAsync<TSource, TDestination>(bool include = false)
-               where TSource : class
-               where TDestination : class
-           {
-               if (include) _dbRead.Include<TSource>();
-               var entities = await _dbRead.GetAsync<TSource>();
-               return _mapper.Map<List<TDestination>>(entities);
-
-           }
-
-           public async Task<List<TDestination>> GetAsync<TSource, TDestination>(Expression<Func<TSource, bool>> expression, bool include = false)
-               where TSource : class
-               where TDestination : class
-           {
-               if (include) _dbRead.Include<TSource>();
-               var entities = await _dbRead.GetAsync(expression);
-               return _mapper.Map<List<TDestination>>(entities);
-           }*/
-
-
-        /*    public async Task<TDestination> SingleAsync<TSource, TDestination>(Expression<Func<TSource, bool>> expression, bool include = false)
-            where TSource : class
-            where TDestination : class
-        {
-            if (include) _dbRead.Include<TSource>();
-            var entity = await _dbRead.SingleAsync(expression);
-            return _mapper.Map<TDestination>(entity);
-        }
-
-        public async Task<bool> UpdateAsync<TSource, TDestination>(TSource item)
-            where TSource : class
-            where TDestination : class
-        {
-            try
-            {
-                var entity = _mapper.Map<TDestination>(item);
-                _dbWrite.Update(entity);
-                return await _dbWrite.SaveChangesAsync();
-            }
-            catch
-            {
-                return false;
-            }
-
-        }*/
     }
 }

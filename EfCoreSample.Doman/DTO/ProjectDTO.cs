@@ -18,7 +18,7 @@ namespace EfCoreSample.Doman.DTO
         {
             throw new NotImplementedException();
         }
-
+        
         public DateTime LastUpdated { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

@@ -35,7 +35,7 @@ namespace EfCoreSample.Infrastructure.Repository
             return await _context.Projects.Where(expression).ToListAsync();
         }
 
-        public async Task<Project> InsertAsync(Project item)
+        public Project InsertAsync(Project item)
         {
             //TODO  check if entity w this id is already tracked
 
@@ -51,8 +51,8 @@ namespace EfCoreSample.Infrastructure.Repository
                 return buyer;
             }           
              */
-             await _context.Projects.AddAsync(item);
-            return item;
+            var added = _context.Projects.Add(item).Entity;
+            return added;
 
         }
 
