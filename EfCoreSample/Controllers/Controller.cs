@@ -1,9 +1,12 @@
-﻿using EfCoreSample.Doman.DTO;
+﻿using AutoMapper;
+using EfCoreSample.Doman.DTO;
 using EfCoreSample.Doman.Entities;
 using EfCoreSample.Infrastructure.Abstraction;
+using EfCoreSample.Infrastructure.Extensions;
 using EfCoreSample.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,37 +18,25 @@ namespace EfCoreSample.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IService<Project, ProjectDTO, long> _db;
+        private readonly IService<Project, ProjectDTO, long> _dbService;
+        private readonly LinkGenerator _link;
+        private readonly IMapper _mapper;
 
-        public ProjectController(IService<Project, ProjectDTO, long> db)
+
+        public ProjectController(IService<Project, ProjectDTO, long> dbService, IMapper mapper, LinkGenerator link)
         {
-            _db = db;
+            _dbService = dbService;
+            _link = link;
+            _mapper = mapper;
         }
-        /*
+
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<List<ProjectDTO>>> Get()
         {
             try
             {
-                return await _db.GetAsync<List<ProjectDTO>>(s => s.Id.Equals(condit));
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Database Failure");
-            }
-        }*/
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDTO>> Get(long id)
-        {
-            try
-            {
-                var dto = await _db.FindAsync(id);
-                if (dto == null) return NotFound();
-                return dto;
+                return await _dbService.GetAsync<List<ProjectDTO>>(s => s.Id.Equals(condit));
             }
             catch
             {
@@ -53,23 +44,37 @@ namespace EfCoreSample.Controllers
                 "Database Failure");
             }
         }
-/*
-        // POST api/values
-        [HttpPost]
-        public async Task<ActionResult<ProjectDTO>> Post(ProjectDTO dto)
+
+        // GET api/values/5
+        [HttpGet("{id:long}")]
+        public async Task<ActionResult<ProjectDTO>> Get(long id)
         {
-            if (dto == null) return BadRequest("No entity provided");
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-                var id = await _db.CreateAsync<CourseDTO, Course>(model);
+                var entity = await _dbService.FindAsync(id);
+                if (entity == null) return NotFound();
+                return _mapper.Map<ProjectDTO>(entity);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Database Failure");
+            }
+        }
+
+        // POST api/values
+        [HttpPost]
+        public async Task<ActionResult<ProjectDTO>> Post(SaveProjectDTO saveDto)
+        {
+            if (saveDto == null) return BadRequest("No entity provided");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
+            var entity = _mapper.Map<Project>(saveDto);
+            try
+            {
+                var id = await _dbService.InsertAsync(entity);
                 if (id < 1) return BadRequest("Unable to add the entity");
-                var entity = await _db.SingleAsync<Course, CourseDTO>(s =>
-                s.Id.Equals(id));
-                if (dto == null) return BadRequest(
-                "Unable to add the entity");
-                return CreatedAtRoute("FindAsync",
-                new { publisherId = entity.Id}, bookToAdd);
+                return Created(_link.GetPathByAction("Get", "Project", new { id }), entity);
             }
             catch
             {
@@ -79,27 +84,59 @@ namespace EfCoreSample.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id:long}")]
+        public async Task<ActionResult> Put(long id, ProjectDTO projectDTO)
         {
-            if (book == null) return BadRequest();
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var bookToUpdate = _repository.GetBook(publisherId, bookId);
-            if (bookToUpdate == null) return NotFound();
-            _repository.UpdateBook(publisherId, bookId, book);
-            _repository.Save();
-            return NoContent();
+            if (projectDTO == null) return BadRequest("No entity provided");
+            if (!id.Equals(projectDTO.Id)) return BadRequest("Differing ids");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
+            try
+            {
+                var entity = await _dbService.FindAsync(id);
+                if (entity == null) return NotFound();
+                if (_dbService.Update(entity).Result) return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to update the entity");
+            }
+            return BadRequest("Unable to update the entity");
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(long id)
         {
-            var bookToDelete = _repository.GetBook(publisherId, bookId);
-            if (bookToDelete == null) return NotFound();
-            _repository.DeleteBook(bookToDelete);
-            _repository.Save();
-            return NoContent();
-        }*/
+            try
+            {
+                var entity = await _dbService.FindAsync(id);
+                if (entity == null) return NotFound();
+                if (await _dbService.DeleteAsync(id)) return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to delete the entity");
+            }
+            return BadRequest("Unable to delete the entity");
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(ProjectDTO projectDTO)
+        {           
+            try
+            {
+                var entity = await _dbService.FindAsync(projectDTO.Id);
+                if (entity == null) return NotFound();
+                if (await _dbService.DeleteAsync(entity)) return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to delete the entity");
+            }
+            return BadRequest("Unable to delete the entity");
+        }
     }
 }

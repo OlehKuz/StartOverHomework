@@ -16,6 +16,13 @@ namespace EfCoreSample.Doman.AutoMapper
                     .ForMember(dest => dest.Status,
                         src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
 
+            CreateMap<SaveProjectDTO, Project>()
+                    .ForMember(dest => dest.Status,
+                        src => src.MapFrom(s => EnumExtention.GetDescriptionFromEnumValue(s.Status)));
+            CreateMap<Project, SaveProjectDTO>()
+                    .ForMember(dest => dest.Status,
+                        src => src.MapFrom(s => EnumExtention.GetEnumValueFromDescription<EProjectStatus>(s.Status)));
+
         }
 
     }

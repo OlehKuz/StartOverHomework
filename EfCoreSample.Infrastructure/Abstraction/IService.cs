@@ -12,26 +12,20 @@ namespace EfCoreSample.Infrastructure.Abstraction
 {
     public interface IService<TSource,TDestination, TKey> where TSource : class where TDestination : class
     {
-       /* Task<SaveTSourceResponse> SaveAsync<SaveTSourceResponse>(TSource category)
-            where SaveTSourceResponse : BaseResponse;*/
-
+       
         Task<TDestination> FindAsync(TKey key);
 
-       /* Task<List<TDestination>> GetAsync<TDestination>
-            (Expression<Func<TSource, bool>> expression) where TDestination : class;
-        Task<TKey> InsertAsync<TDestination>(TSource entity)
-             where TDestination : class;
+        Task<List<TDestination>> GetAsync (Expression<Func<TSource, bool>> expression);
+        Task<TKey> InsertAsync<TSourceSaveDto>(TSourceSaveDto entity) where TSourceSaveDto:class;
+           
+        Task UpdateRange(IEnumerable<TDestination> entities);
+           
 
-        Task UpdateRange<TDestination>(IEnumerable<TDestination> entities)
-             where TDestination : class;
-
-        Task<bool> Update<TDestination>(TDestination entity)
-            where TDestination : class;
+        Task<bool> Update(TDestination entity);
 
         Task<bool> DeleteAsync(TKey key);
 
         Task<bool> DeleteAsync(TSource entity);
         Task<bool> AnyAsync(TKey key);
-        */
     }
 }

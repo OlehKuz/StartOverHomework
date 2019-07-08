@@ -32,10 +32,10 @@ namespace EfCoreSample.Infrastructure.Repository
 
         public async Task<IEnumerable<Project>> GetAsync(Expression<Func<Project, bool>> expression)
         {
-            return await _context.Projects.Where(expression).ToListAsync();
+            return  await _context.Projects.Where(expression).ToListAsync();
         }
 
-        public Project InsertAsync(Project item)
+        public async Task<Project> InsertAsync(Project item)
         {
             //TODO  check if entity w this id is already tracked
 
